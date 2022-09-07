@@ -52,7 +52,6 @@ typedef void(*IndexQueryCallback)(
     const PropertyCallbackInfo<v8::Integer>&);
 
 namespace imp {
-typedef v8::Local<v8::AccessorSignature> Sig;
 
 static const int kDataIndex =                    0;
 
