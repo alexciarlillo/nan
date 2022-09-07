@@ -2509,53 +2509,6 @@ inline void SetPrototypeMethod(
 
 //=== Accessors and Such =======================================================
 
-NAN_DEPRECATED inline void SetAccessor(
-    v8::Local<v8::ObjectTemplate> tpl
-  , v8::Local<v8::String> name
-  , GetterCallback getter
-  , SetterCallback setter
-  , v8::Local<v8::Value> data
-  , v8::AccessControl settings
-  , v8::PropertyAttribute attribute
-  , imp::Sig signature) {
-  HandleScope scope;
-
-  imp::NativeGetter getter_ =
-      imp::GetterCallbackWrapper;
-  imp::NativeSetter setter_ =
-      setter ? imp::SetterCallbackWrapper : 0;
-
-  v8::Local<v8::ObjectTemplate> otpl = New<v8::ObjectTemplate>();
-  otpl->SetInternalFieldCount(imp::kAccessorFieldCount);
-  v8::Local<v8::Object> obj = NewInstance(otpl).ToLocalChecked();
-
-  obj->SetInternalField(
-      imp::kGetterIndex
-    , New<v8::External>(reinterpret_cast<void *>(getter)));
-
-  if (setter != 0) {
-    obj->SetInternalField(
-        imp::kSetterIndex
-      , New<v8::External>(reinterpret_cast<void *>(setter)));
-  }
-
-  if (!data.IsEmpty()) {
-    obj->SetInternalField(imp::kDataIndex, data);
-  }
-
-  tpl->SetAccessor(
-      name
-    , getter_
-    , setter_
-    , obj
-    , settings
-    , attribute
-#if (NODE_MODULE_VERSION < NODE_16_0_MODULE_VERSION)
-    , signature
-#endif
-  );
-}
-
 inline void SetAccessor(
     v8::Local<v8::ObjectTemplate> tpl
   , v8::Local<v8::String> name
